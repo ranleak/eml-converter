@@ -2,7 +2,7 @@ import email
 from email import policy
 import fastapi
 from fastapi import FastAPI, UploadFile, File, Query, HTTPException
-from fastapi.responses import Response
+from fastapi.responses import Response, RedirectResponse
 import modal
 
 # 1. Define the Modal App container
@@ -81,6 +81,11 @@ def generate_html_string(headers: dict, content: str, is_html: bool) -> str:
     </body>
     </html>
     """
+
+@web_app.get("/")
+async def root():
+    """Redirects the base URL to the interactive API documentation."""
+    return RedirectResponse(url="/docs")
 
 @web_app.post("/convert")
 async def convert_eml(
